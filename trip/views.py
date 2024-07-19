@@ -1,5 +1,8 @@
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from django.urls import reverse_lazy
 
 from .models import Trip, Note
 
@@ -13,3 +16,14 @@ def trips_list(request):
         'trips': trips
     }
     return render(request, 'trip/trip_list.html',context )
+
+class TripCreateView(CreateView):
+    model = Trip
+    success_url = reverse_lazy('trip-list')
+    fields = ['city', 'country', 'start_date', 'end_date']
+
+# this makes sure the form is valid and also the owner field = logged in user 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+    
