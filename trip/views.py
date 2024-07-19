@@ -1,7 +1,7 @@
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DetailView
 from django.urls import reverse_lazy
 
 from .models import Trip, Note
@@ -27,3 +27,13 @@ class TripCreateView(CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
     
+class TripDetailView(DetailView):
+    model = Trip
+
+    #below makes sure that we also get the notes data in addition to the trip data
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        trip = context['object']
+        notes = trip.notes.all()
+        context['notes'] = notes
+        return context
