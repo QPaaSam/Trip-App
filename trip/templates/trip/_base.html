@@ -20,7 +20,7 @@
                 </ul>
             </div>
             <div class="mt-auto w-full text-center flex md:flex-col justify-evenly py-2 md:pt-0">
-                <p class="">{{ user.username }}</p>
+                <p class=""><a href="{% url 'trip-list' %}">{{ user.username }}</a></p>
                 <hr class="my-2">
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
